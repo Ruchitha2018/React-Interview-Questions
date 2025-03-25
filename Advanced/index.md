@@ -1,15 +1,58 @@
 ## What is Reselect Library?
-- Reselect is a selector library for Redux that helps optimize derived state calculations.
+- Reselect is a selector library for Redux that helps optimize derived state selection by memoizing computed values.
 - Improves Performance – Memoizes selectors to avoid unnecessary re-computation.
 - Works with Redux State – Extracts and derives data efficiently.
 - Composes Selectors – Allows chaining multiple selectors.
+
+```js
+//Example without Reselect
+const getUsers = (state) => state.users;
+const getFilter = (state) => state.filter;
+
+// Non-memoized selector (Recomputes every time)
+const getFilteredUsers = (state) => {
+  console.log("Recalculating filtered users...");
+  return state.users.filter(user => user.name.includes(state.filter));
+};
+
+// Redux state
+const state = {
+  users: [{ name: "Alice" }, { name: "Bob" }],
+  filter: "A"
+};
+
+// Each call recalculates the filtered users
+console.log(getFilteredUsers(state)); // [{ name: "Alice" }]
+console.log(getFilteredUsers(state)); // Recomputes every time
+```
+
+```js
+//Example with Reselect
+import { createSelector } from 'reselect';
+
+const getUsers = (state) => state.users;
+const getFilter = (state) => state.filter;
+
+// Memoized Selector
+const getFilteredUsers = createSelector(
+  [getUsers, getFilter],
+  (users, filter) => {
+    console.log("Recalculating filtered users...");
+    return users.filter(user => user.name.includes(filter));
+  }
+);
+
+// Redux state
+console.log(getFilteredUsers(state)); // [{ name: "Alice" }] (Recalculates)
+console.log(getFilteredUsers(state)); // Uses cached result (No recalculation)
+```
 
 ## Do you need to have a particular build tool to use Redux?
 No, you don’t need a specific build tool to use Redux. Redux can be used with plain JavaScript, but in modern projects, it's often bundled with tools like Webpack, Vite, or Parcel for better development and performance optimization.
 
 ## What is Render Hijacking?
 
-## What is the purpose of registerServiceWorker in React?
+## What is the purpose of `registerServiceWorker` in React?
 1. Offline Support: Allows the app to work without an internet connection by caching files.
 2. Faster Loading: Loads the app faster by using cached assets instead of fetching them from the network.
 3. Background Features: Enables tasks like background sync and push notifications.
@@ -23,7 +66,7 @@ serviceWorker.register(); // Registers the service worker
 // Use serviceWorker.unregister() if you don't need it.
 ```
 
-- Works only on https:// or localhost.
+- Works only on `https://` or `localhost`.
 - Use carefully to avoid serving outdated cached content.
 
 ## What is the purpose of `displayName` class property?
@@ -50,3 +93,5 @@ export default Greeting;
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 ```
+
+## 

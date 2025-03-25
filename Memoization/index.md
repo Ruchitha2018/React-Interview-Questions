@@ -98,8 +98,11 @@ export default Parent;
 
 ```
 - Child will only re-render when the `count` prop changes.
-- Changes in otherState won't trigger a re-render for Child.
+- The Child component is wrapped with `React.memo`, which prevents re-renders unless its props change.
+- `count` is the only prop passed to Child, and it does not change when `otherState` updates.
+- Since `otherState` is not a prop of Child, the Child component remains unchanged, and React skips its re-render.
 - We can customize the comparison logic using a second argument to `React.memo`.
+
 
 ```js
 const MyComponent = React.memo(
@@ -139,8 +142,8 @@ export default App;
 
 ```
 
-- ExpensiveCalculation is only called when number changes.
-- Changing toggle does not trigger the expensive calculation.
+- `ExpensiveCalculation` is only called when number changes.
+- Changing `toggle` does not trigger the expensive calculation.
 
 
 ### 3. ```useCallback``` 
@@ -224,7 +227,7 @@ export default function App() {
   - The component is loaded when it’s rendered for the first time.
   - A `Suspense` component is required to handle the loading state.
 
-## How to Use React.memo Effectively When Passing Functions as Props?
+## How to Use `React.memo` Effectively When Passing Functions as Props?
 - In JavaScript, functions are reference types.
 - When a parent component re-renders, even if the logic of the function doesn't change, a new function reference is created and passed down as a prop.
 - `React.memo` detects this new reference and considers it a prop change, so it re-renders the child component.
@@ -313,3 +316,8 @@ const user = useMemo(() => ({ name: "John" }), []);
 - No, `React.lazy()` does NOT support named exports. It only works with default exports.
 - `React.lazy()` expects a module that returns a default export.
 - Named exports require destructuring, which `React.lazy()` does not support.
+
+## What is Suspense Component?
+- A built-in React component for handling lazy loading.
+- Displays a fallback UI while waiting for the component to load.
+- Works with `React.lazy()` and async data fetching (React 18+ with Suspense for Data Fetching).

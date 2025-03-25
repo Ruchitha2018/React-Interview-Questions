@@ -52,3 +52,21 @@ const App = () => (
 
 export default App;
 ```
+### 4. Webpack Configuration for Code-Splitting
+```js
+module.exports = {
+  entry: {
+    main: "./src/index.js",
+  },
+  output: {
+    filename: "[name].[contenthash].js", // Generates unique names for cache busting
+    path: __dirname + "/dist",
+  },
+  optimization: {
+    splitChunks: {
+      chunks: "all", // Splits both dynamic & static imports
+    },
+  },
+};
+```
+- This automatically splits vendor libraries (`react`, `lodash`, etc.) into separate bundles.
