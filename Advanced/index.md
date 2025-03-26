@@ -156,3 +156,94 @@ Tesla – Uses React for web and control panel interfaces.
 - Enhance Performance – Hooks optimize re-renders by managing dependencies effectively.
 
 ## How do you access imperative API of web components?
+- Use `useRef` – To get a reference to the Web Component.
+- Use `useEffect` – To interact with the component after it mounts.
+- Directly call methods – Access Web Component methods via `ref.current`.
+
+```js
+<script>
+  class CustomButton extends HTMLElement {
+    connectedCallback() {
+      this.innerHTML = `<button>Click Me</button>`;
+    }
+
+    focusButton() {
+      this.querySelector("button").focus();
+    }
+  }
+  customElements.define("custom-button", CustomButton);
+</script>
+```
+```js
+import { useEffect, useRef } from "react";
+
+function App() {
+  const buttonRef = useRef(null);
+
+  useEffect(() => {
+    if (buttonRef.current) {
+      buttonRef.current.focusButton(); // Calling the Web Component's method
+    }
+  }, []);
+
+  return <custom-button ref={buttonRef}></custom-button>;
+}
+
+export default App;
+```
+
+## What is an Imperative API?
+An Imperative API allows direct control over an object/component using methods. It tells how to do something.
+- Direct Commands – You explicitly call functions/methods.
+- Immediate Execution – Runs instructions step-by-step.
+- Mutates State Directly – Doesn't rely on declarative updates.
+```js
+//Imperative Approach
+function MyComponent() {
+  const inputRef = useRef(null);
+
+  const focusInput = () => {
+    inputRef.current.focus(); // Directly calling a method
+  };
+
+  return (
+    <div>
+      <input ref={inputRef} type="text" />
+      <button onClick={focusInput}>Focus Input</button>
+    </div>
+  );
+}
+```
+```js
+//Declarative Approach
+function MyComponent() {
+  const [isFocused, setIsFocused] = useState(false);
+
+  return (
+    <div>
+      <input autoFocus={isFocused} type="text" />
+      <button onClick={() => setIsFocused(true)}>Focus Input</button>
+    </div>
+  );
+}
+```
+### Examples
+- DOM Methods – focus(), scrollTo(), play()
+- Web Component Methods – Custom elements exposing .open(), .close(), etc.
+- Canvas API – ctx.fillRect(), ctx.drawImage()
+- Third-Party Libraries – Modals (modal.show()), Maps (map.setCenter())
+
+### When to use?
+- When interacting with the DOM (e.g., focusing an input).
+- When using third-party libraries that rely on methods.
+- When performance optimization is needed (e.g., avoiding unnecessary re-renders).
+
+## Do browsers understand JSX code?
+Browsers do not natively understand JSX, but tools like Babel convert it into JavaScript that browsers can execute.
+
+## Describe about data flow in react?
+- Unidirectional Data Flow → Ensures predictable state updates.
+- Props for Parent-to-Child → Best for passing read-only data.
+- Callbacks for Child-to-Parent → Used for event handling.
+- State Lifting for Sibling Data Sharing → Common in form handling.
+- Global State (Redux, Context API, Zustand, etc.) for Complex Apps → Used when many components need access to the same data.
