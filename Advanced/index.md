@@ -94,4 +94,65 @@ import "core-js/stable";
 import "regenerator-runtime/runtime";
 ```
 
-## 
+## Can you list down top websites or applications using react as front end framework?
+1. Tech Giants & Social Media
+  - Facebook – Developed React and uses it extensively.
+  - Instagram – Uses React for web UI components.
+  - WhatsApp Web – Built using React.
+  - Twitter (New Web App) – Uses React for a modern UI.
+  - Reddit – The latest web version is built with React.
+
+2. E-Commerce & Payments
+Amazon (AWS Amplify UI) – Uses React in AWS services.
+
+Netflix – React improves load speeds and performance.
+
+Walmart – Uses React for a better user experience.
+
+Shopify – Storefronts and dashboards use React.
+
+PayPal – React is part of their web application stack.
+
+3. Productivity & Collaboration Tools
+Dropbox – Uses React for file management UI.
+
+Trello – Kanban-based project management tool powered by React.
+
+Asana – Uses React for task and project management.
+
+Notion – Uses React for note-taking and database UI.
+
+Microsoft Office Web Apps – Word, Excel, etc., use React.
+
+4. Streaming & Entertainment
+Spotify – Web-based music player built with React.
+
+YouTube TV – Uses React in its TV interface.
+
+Hulu – React enhances their UI experience.
+
+5. Development & Learning Platforms
+GitHub – Some UI parts, including GitHub Desktop, use React.
+
+CodeSandbox – Online React-based code editor.
+
+Coursera – Uses React for online courses.
+
+Udemy – Uses React in its learning platform.
+
+6. Other Notable Mentions
+Airbnb – Uses React for booking UI.
+
+Uber – React powers the web app and dashboard.
+
+Tesla – Uses React for web and control panel interfaces.
+
+## Why do we use array destructuring (square brackets notation) in `useState`?
+
+## Why Were Hooks Introduced?
+- Eliminate Class Component Complexity – No need for this, binding, and lifecycle confusion.
+- Improve Code Reusability – Custom hooks allow logic sharing across components.
+- Better State Management – useState, useEffect, useReducer simplify state handling.
+- Enhance Performance – Hooks optimize re-renders by managing dependencies effectively.
+
+## How do you access imperative API of web components?
