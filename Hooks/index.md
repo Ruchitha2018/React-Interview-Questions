@@ -1,7 +1,7 @@
 # Hooks
 
 ## Definition:
-- Hooks are functions in React that allows to use state and lifecycle methods in functional components.
+- Hook are functions in React that allows to use state and lifecycle methods in functional components.
 
 ## List of Hooks:
 - ```useState```
