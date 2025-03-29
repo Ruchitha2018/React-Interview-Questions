@@ -1,3 +1,60 @@
+# Advanced
+
+## How do you implement Server Side Rendering or SSR?
+1. Create an Express Server (`server.js`)
+```js
+import express from "express";
+import React from "react";
+import ReactDOMServer from "react-dom/server";
+import App from "./src/App"; // Import your React App component
+
+const app = express();
+
+app.use(express.static("build")); // Serve static files
+
+app.get("*", (req, res) => {
+  const appHTML = ReactDOMServer.renderToString(<App />);
+
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>React SSR</title>
+    </head>
+    <body>
+      <div id="root">${appHTML}</div>
+      <script src="/static/js/main.js"></script>
+    </body>
+    </html>
+  `);
+});
+
+app.listen(3000, () => console.log("Server running on http://localhost:3000"));
+```
+2. Modify `index.js` (Hydrate on Client)
+```js
+import React from "react";
+import { hydrateRoot } from "react-dom/client";
+import App from "./App";
+
+hydrateRoot(document.getElementById("root"), <App />);
+```
+- Now, React renders on the server first, then hydrates on the client! 
+- `hydrateRoot` is used for hydrating a server-rendered React app on the client.
+- It attaches event listeners to existing server-rendered HTML instead of re-rendering it.
+- Faster than `createRoot` because it doesn't replace the existing DOM.
+
+## How to enable production mode in React?
+- For Vite:
+  - Run: `npm run build`
+  - Preview: `npm run preview`
+- For Webpack:
+  - Set mode: "production" in `webpack.config.js`
+  - Run: `npm run build`
+
+
 ## What is Reselect Library?
 - Reselect is a selector library for Redux that helps optimize derived state selection by memoizing computed values.
 - Improves Performance – Memoizes selectors to avoid unnecessary re-computation.
@@ -247,3 +304,18 @@ Browsers do not natively understand JSX, but tools like Babel convert it into Ja
 - Callbacks for Child-to-Parent → Used for event handling.
 - State Lifting for Sibling Data Sharing → Common in form handling.
 - Global State (Redux, Context API, Zustand, etc.) for Complex Apps → Used when many components need access to the same data.
+
+## What is Concurrent Rendering?
+- Concurrent Rendering is a React feature that allows rendering multiple UI tasks without blocking the main thread, making apps more responsive and smoother.
+- Interruptible Rendering – React can pause and resume rendering when needed.
+- Prioritization – High-priority updates (like user input) can be processed first.
+- Background Rendering – Low-priority tasks run in the background without blocking the UI.
+
+### APIs for Concurrent Rendering:
+- useTransition() – Defers low-priority updates.
+- useDeferredValue() – Delays value updates smoothly.
+- Suspense – Loads components lazily without blocking UI.
+
+### With Concurrent Rendering (Non-Blocking UI):
+- React splits rendering into smaller chunks and prioritizes urgent updates.
+- Introduced via React 18’s `createRoot()` API.

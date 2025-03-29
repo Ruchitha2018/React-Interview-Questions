@@ -136,3 +136,23 @@ const Greeting = ({ name = "Guest" }) => {
 
 export default Greeting;
 ```
+
+## How to combine multiple inline style objects?
+
+```js
+const App = () => (
+  <div style={{ ...baseStyle, ...extraStyle }}>Hello, React!</div>
+);
+```
+
+```js
+const isDarkMode = true;
+const darkModeStyle = { backgroundColor: "black", color: "white" };
+const lightModeStyle = { backgroundColor: "white", color: "black" };
+
+const App = () => (
+  <div style={{ ...baseStyle, ...(isDarkMode ? darkModeStyle : lightModeStyle) }}>
+    Theme Example
+  </div>
+);
+```

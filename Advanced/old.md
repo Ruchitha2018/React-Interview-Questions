@@ -38,60 +38,6 @@ function FixEventPooling() {
 }
 ```
 
-## How do you implement Server Side Rendering or SSR?
-1. Create an Express Server (`server.js`)
-```js
-import express from "express";
-import React from "react";
-import ReactDOMServer from "react-dom/server";
-import App from "./src/App"; // Import your React App component
-
-const app = express();
-
-app.use(express.static("build")); // Serve static files
-
-app.get("*", (req, res) => {
-  const appHTML = ReactDOMServer.renderToString(<App />);
-
-  res.send(`
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>React SSR</title>
-    </head>
-    <body>
-      <div id="root">${appHTML}</div>
-      <script src="/static/js/main.js"></script>
-    </body>
-    </html>
-  `);
-});
-
-app.listen(3000, () => console.log("Server running on http://localhost:3000"));
-```
-2. Modify `index.js` (Hydrate on Client)
-```js
-import React from "react";
-import { hydrateRoot } from "react-dom/client";
-import App from "./App";
-
-hydrateRoot(document.getElementById("root"), <App />);
-```
-- Now, React renders on the server first, then hydrates on the client! 
-- `hydrateRoot` is used for hydrating a server-rendered React app on the client.
-- It attaches event listeners to existing server-rendered HTML instead of re-rendering it.
-- Faster than `createRoot` because it doesn't replace the existing DOM.
-
-## How to enable production mode in React?
-- For Vite:
-  - Run: `npm run build`
-  - Preview: `npm run preview`
-- For Webpack:
-  - Set mode: "production" in `webpack.config.js`
-  - Run: `npm run build`
-
 ## what does build folder contains?
 After running `npm run build`, React generates a `build/` folder containing optimized production files.
 1. `index.html` → Main HTML file (links to bundled JS & CSS).

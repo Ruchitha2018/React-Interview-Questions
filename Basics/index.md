@@ -5,21 +5,21 @@
 - Open-Source
 - JS Frontend Library
 - used for building composable UIs particularly for SPAs.
-
-## Features of React?
-
+  
+## What are the features of React?
 - Uses JSX Syntax: A syntax extension that allows you to write HTML-like code within JavaScript.
 - Uses Virtual DOM
 - Component Based Architecture
 - Supports Server Side Rendering using Next.js, which is useful for SEO.
 - Unidirectional/one-way data flow
 
-## JSX
+
+## What is JSX?
 
 - A syntax extension that allows you to write HTML-like code within JavaScript.
 - Syntactic Sugar for the `React.createElement(type, props, ...children)`
 
-## Ways of creating components
+## What are the ways of creating components
 
 - Functional Components
 - Class Components
@@ -37,14 +37,14 @@
 - Immutable
 - Passed as Attributes
 
-## Key Prop?
+## What is Key Prop?
 
 - Special attribute should include when mapping arrays/objects.
 - Helps which items have changed, added or removed.
 - Used for performance optimization.
 - Should be unique value
 
-## Virtual DOM
+## What is Virtual DOM?
 
 - It is the lightweight copy of the real DOM.
 - Steps:
@@ -54,40 +54,39 @@
   - React identifies which parts of the virtual DOM have changed (e.g., new elements, deleted elements, updated content) and needs to be reflected in the real DOM.
   - It updates only the changed parts of the real DOM, making the app fast and efficient called Reconciliation.
   - Reconciliation helps React figure out the smallest number of changes to make, improving performance and speed.
-
-## Controlled Components
+## What are Controlled Components?
 
 - Forms element state is managed by React.
 - Value of the input is controlled by the components state.
 - Uses `useState()`
 
-## Uncontrolled Components
+## What are Uncontrolled Components?
 
 - Forms element state is managed by DOM.
 - Input value is accessed using a ```ref```.
 
-## React Fiber
+## What is React Fiber
 - React Fiber is the new reconciliation engine in React (introduced in React 16) that improves rendering performance.
   - Incremental rendering – Splits work into chunks for smooth updates
   - Concurrency – Prioritizes updates for a better user experience
   - Pausing & resuming rendering – Avoids UI blocking
   - Better animations & transitions – More fluid interactions
 
-## Synthetic Events
+## What are Synthetic Events?
 - Are wrapper elements around the browser's native element.
 - Provide consistent behaviour across different browsers and optimize event handling.
 
-## Children Prop
+## What is Children Prop?
 - It is a special prop that allows to pass content(text, element or component) to a component from its parent.
 - commonly used in layout components like wrappers, containers or modal dialogs.
 
-## Fragments
+## What are Fragments?
 
 - It is the way to group multiple elements together without adding extra `div` or nodes.
 - `<></>`
 - `<React.Fragment></React.Fragment>`
 
-## Portals
+## What are Portals?
 
 - It allows us to render components outside the parent component DOM hierarchy.
 - Examples are Modals, Tooltips, Notifications
@@ -118,6 +117,88 @@ function App() {
 
 export default App;
 ```
+## How to apply validation on props in React?
+1. Using PropTypes (for JavaScript)
+```js
+npm install prop-types
+```
+```js
+import React from "react";
+import PropTypes from "prop-types";
+
+const MyComponent = ({ name, age, isAdmin }) => {
+  return (
+    <div>
+      <h2>Name: {name}</h2>
+      <p>Age: {age}</p>
+      <p>{isAdmin ? "Admin" : "User"}</p>
+    </div>
+  );
+};
+
+// Define prop types and make some required
+MyComponent.propTypes = {
+  name: PropTypes.string.isRequired, // Required string
+  age: PropTypes.number, // Optional number
+  isAdmin: PropTypes.bool, // Boolean
+};
+
+export default MyComponent;
+```
+2. Using TypeScript
+   - TypeScript ensures type safety at compile time, preventing invalid props from being passed.
+x
+```js
+import React from "react";
+import PropTypes from "prop-types";
+
+const MyComponent = ({ name, age, isAdmin }) => {
+  return (
+    <div>
+      <h2>Name: {name}</h2>
+      <p>Age: {age}</p>
+      <p>{isAdmin ? "Admin" : "User"}</p>
+    </div>
+  );
+};
+
+// Define prop types and make some required
+MyComponent.propTypes = {
+  name: PropTypes.string.isRequired, // Required string
+  age: PropTypes.number, // Optional number
+  isAdmin: PropTypes.bool, // Boolean
+};
+
+export default MyComponent;
+```
+| Feature           | PropTypes       | TypeScript     |
+|------------------|---------------|---------------|
+| **Validation**   | Runtime        | Compile-time  |
+| **Error Detection** | Console warnings | Build-time errors |
+| **Performance**  | Slightly slower | Faster        |
+| **Additional Setup** | Install `prop-types` | Use `.tsx` file |
+
+## What are the limitations of React?
+- Frequent Updates – Fast-changing versions can cause breaking changes.
+
+- Steep Learning Curve – Concepts like JSX, hooks, and state management take time to learn.
+
+- SEO Issues – Single-page applications (SPA) may not be SEO-friendly without extra setup.
+
+- JSX Complexity – Mixing JavaScript with HTML can make code harder to read.
+
+- Large Bundle Size – Apps can become heavy due to dependencies.
+
+- Boilerplate Code – State management with Redux or Context requires extra code.
+
+- No Built-in State Management – External libraries like Redux or Recoil are needed for complex apps.
+
+- Third-Party Dependencies – React lacks built-in features like routing and form handling.
+
+- Performance Issues – Frequent re-renders and large component trees can slow down apps.
+
+- Debugging Difficulty – Managing state and hooks can be tricky.
+
 
 ## Difference between React and React DOM:
 - React:
@@ -136,33 +217,73 @@ export default App;
 - Separation allows React to work on different platforms (e.g., React Native).
 - Keeps React lightweight and modular for easier maintenance.
 
-## How to combine multiple inline style objects?
-
+## Why we need to be careful when spreading props on DOM elements?
+1. Unintended Props – Extra or invalid props may get added, causing React warnings.
 ```js
-const App = () => (
-  <div style={{ ...baseStyle, ...extraStyle }}>Hello, React!</div>
-);
+const Button = (props) => <button {...props}>Click</button>;
+<Button color="blue" onClick={() => alert("Clicked!")} />;
+```
+2. Performance Issues – Passing unnecessary props can lead to extra re-renders.
+3. Security Risks – If props come from untrusted sources, it may lead to XSS vulnerabilities.
+```js
+const userProps = { onClick: () => alert("Clicked!"), dangerous: "<script>alert('XSS')</script>" };
+<div {...userProps} />;
+```
+4. Loss of Control – Harder to track which props are being passed, making debugging difficult.
+5. Invalid HTML Attributes – Non-standard attributes may end up in the DOM, affecting behavior.
+6. **Best Practice:** Filter and pass only required props instead of using `{...props}` blindly. 
+
+## What is Switching Component?
+A switching component in React is a component that conditionally renders different components based on a specific condition (like state, props, or routes).
+ #### Example 1: Conditional Rendering (Manual Switching)
+ ```js
+ const SwitchingComponent = ({ userType }) => {
+  if (userType === "admin") {
+    return <AdminPanel />;
+  } else if (userType === "user") {
+    return <UserDashboard />;
+  } else {
+    return <GuestPage />;
+  }
+};
+
+// Usage
+<SwitchingComponent userType="admin" />;
+```
+#### Example 2: Using React Router (Route Switching)
+```js
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./Home";
+import About from "./About";
+import NotFound from "./NotFound";
+
+const App = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="*" element={<NotFound />} />  {/* Default fallback */}
+      </Routes>
+    </Router>
+  );
+};
 ```
 
-```js
-const isDarkMode = true;
-const darkModeStyle = { backgroundColor: "black", color: "white" };
-const lightModeStyle = { backgroundColor: "white", color: "black" };
+## What are React Mixins?
+- Mixins were a feature in React class components (before ES6 classes) that allowed sharing reusable logic across multiple components. 
+- Removed in React 16 due to:
+  - Name Collisions – Multiple mixins could have the same method names, causing conflicts.
+  - Implicit Dependencies – Hard to track where a method came from.
+  - Performance Issues – Mixins led to unpredictable re-renders.
+  - Harder to Maintain – Code became difficult to debug as mixins spread logic across components.
+- Replaced by better alternatives like:
+  - Higher-Order Components (HOCs) – Wraps a component to add functionality.
+  - Custom Hooks (Recommended) – Encapsulates reusable logic in function components.
+- Modern React (with Hooks) does not support Mixins.
 
-const App = () => (
-  <div style={{ ...baseStyle, ...(isDarkMode ? darkModeStyle : lightModeStyle) }}>
-    Theme Example
-  </div>
-);
-```
 
-## Why you can't update props in React?
-- Props are immutable: They cannot be changed by the child component.
-- Unidirectional data flow: Props flow from parent to child, ensuring predictable updates.
-- Controlled by parent: Props reflect parent state; only the parent can update them.
-- Solution: Manage the value in the parent’s state and pass it via props.
-
-## React Components Naming
+## What are React Components Naming?
 
 1. **Start with a Capital Letter:** Components must use PascalCase (e.g., MyComponent). Lowercase names are treated as HTML tags.
 2. **Avoid Reserved Keywords:** Don't use JavaScript or HTML reserved words like return or default.
@@ -184,24 +305,6 @@ const DynamicComponent = MyComponent;
 <DynamicComponent />;
 ```
 
-## What are the React Animation Packages?
-- Framer Motion
-- React Spring
-- React Transition Group
-- React Motion
-
-## What are React Specific Linters?
-- Help maintain clean, consistent and error-free code in React Projects.
-- Plugins:
- - ```eslint-plugin-react```: Provides linting rules for React.
- - ```eslint-plugin-react-hooks```: Ensures the correct usage of React Hooks.
- - ```eslint-plugin-jsx-a11y```: Enforces accessibility best practices in JSX code.
- - Code formatter, integrates with ESLint using ```eslint-plugin-prettier```.
-
-## Switching Components
-
-## React Mixins
-
 ## Are custom DOM attributes supported in React v16?
 - React 16+ supports custom DOM attributes without needing `data-` or `aria-` prefixes. and passes them to the rendered HTML.
 ```js
@@ -217,6 +320,25 @@ const DynamicComponent = MyComponent;
 ## Why we cant use for loop inside jsx?
 - You can't use a for loop directly inside JSX because JSX expects expressions, and for is a statement, not an expression.
 - Expressions return values, statements perform actions!
+
+## Why you can't update props in React?
+- Props are immutable: They cannot be changed by the child component.
+- Unidirectional data flow: Props flow from parent to child, ensuring predictable updates.
+- Controlled by parent: Props reflect parent state; only the parent can update them.
+- Solution: Manage the value in the parent’s state and pass it via props.
+## What are the React Animation Packages?
+- Framer Motion
+- React Spring
+- React Transition Group
+- React Motion
+
+## What are React Specific Linters?
+- Help maintain clean, consistent and error-free code in React Projects.
+- Plugins:
+ - ```eslint-plugin-react```: Provides linting rules for React.
+ - ```eslint-plugin-react-hooks```: Ensures the correct usage of React Hooks.
+ - ```eslint-plugin-jsx-a11y```: Enforces accessibility best practices in JSX code.
+ - Code formatter, integrates with ESLint using ```eslint-plugin-prettier```.
 
 ## How events are different in React?
 - React wraps native events in a SyntheticEvent wrapper for cross-browser consistency.
