@@ -1,60 +1,5 @@
 # Advanced
 
-## How do you implement Server Side Rendering or SSR?
-1. Create an Express Server (`server.js`)
-```js
-import express from "express";
-import React from "react";
-import ReactDOMServer from "react-dom/server";
-import App from "./src/App"; // Import your React App component
-
-const app = express();
-
-app.use(express.static("build")); // Serve static files
-
-app.get("*", (req, res) => {
-  const appHTML = ReactDOMServer.renderToString(<App />);
-
-  res.send(`
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>React SSR</title>
-    </head>
-    <body>
-      <div id="root">${appHTML}</div>
-      <script src="/static/js/main.js"></script>
-    </body>
-    </html>
-  `);
-});
-
-app.listen(3000, () => console.log("Server running on http://localhost:3000"));
-```
-2. Modify `index.js` (Hydrate on Client)
-```js
-import React from "react";
-import { hydrateRoot } from "react-dom/client";
-import App from "./App";
-
-hydrateRoot(document.getElementById("root"), <App />);
-```
-- Now, React renders on the server first, then hydrates on the client! 
-- `hydrateRoot` is used for hydrating a server-rendered React app on the client.
-- It attaches event listeners to existing server-rendered HTML instead of re-rendering it.
-- Faster than `createRoot` because it doesn't replace the existing DOM.
-
-## How to enable production mode in React?
-- For Vite:
-  - Run: `npm run build`
-  - Preview: `npm run preview`
-- For Webpack:
-  - Set mode: "production" in `webpack.config.js`
-  - Run: `npm run build`
-
-
 ## What is Reselect Library?
 - Reselect is a selector library for Redux that helps optimize derived state selection by memoizing computed values.
 - Improves Performance – Memoizes selectors to avoid unnecessary re-computation.
@@ -103,7 +48,7 @@ const getFilteredUsers = createSelector(
 console.log(getFilteredUsers(state)); // [{ name: "Alice" }] (Recalculates)
 console.log(getFilteredUsers(state)); // Uses cached result (No recalculation)
 ```
-
+---
 ## Do you need to have a particular build tool to use Redux?
 No, you don’t need a specific build tool to use Redux. Redux can be used with plain JavaScript, but in modern projects, it's often bundled with tools like Webpack, Vite, or Parcel for better development and performance optimization.
 
@@ -126,6 +71,10 @@ serviceWorker.register(); // Registers the service worker
 - Works only on `https://` or `localhost`.
 - Use carefully to avoid serving outdated cached content.
 
+## Flux vs Redux
+
+## Error Boundaries
+
 ## What is the purpose of `displayName` class property?
  - Purpose: Helps in debugging by assigning a custom name to a component.
 - Used in: Functional & Class components, Higher-Order Components (HOCs).
@@ -137,7 +86,6 @@ Greeting.displayName = "CustomGreeting";
 export default Greeting;
 ```
 -  Now, DevTools will show `CustomGreeting`
-
 ## What is the browser support for react applications?
 - React applications work on all modern browsers that support ES6+ and JSX.
 - Not Supported (without polyfills)
@@ -150,6 +98,206 @@ export default Greeting;
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 ```
+---
+## What is Keyed Fragments?
+- A fragment in React `(<></>)` lets you group multiple elements without adding extra nodes to the DOM. Sometimes, when you map over a list and return fragments, you need to assign a unique key to each one — that’s when you use keyed fragments.
+
+```js
+const items = [
+  { id: 1, title: 'One', description: 'First item' },
+  { id: 2, title: 'Two', description: 'Second item' },
+];
+
+function ItemList() {
+  return (
+    <div>
+      {items.map((item) => (
+        <React.Fragment key={item.id}>
+          <h2>{item.title}</h2>
+          <p>{item.description}</p>
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+```
+```js
+{items.map((item) => (
+  <>  {/* ❌ Can't put key here */}
+    <h2>{item.title}</h2>
+    <p>{item.description}</p>
+  </>
+))}
+```
+
+## Does React support all HTML attributes?
+1. Common attributes like `src`, `alt`, `href`, `type`, `value`, etc., work as expected.
+2. Some attribute names are different (camelCase).
+   - `class` → `className`
+   - `for` → `htmlFor`
+   - `readonly` → `readOnly`
+   - `maxlength` → `maxLength`
+3. Events use camelCase.
+   - `onclick` → `onClick`
+   - `onchange` → `onChange`
+4. Form elements are controlled using state.
+```js
+<input value={text} onChange={handleChange} />
+```
+5. Some attributes need special handling.
+- Use `autoFocus`, `dangerouslySetInnerHTML`, etc.
+
+## How JSX prevents Injection Attacks?
+### 1. JSX Escapes Content Automatically
+
+- Any value inside `{}` in JSX is **escaped by default**.
+- Special characters (`<`, `>`, `"`, `'`, `/`) are converted to **safe strings**.
+
+**Example:**
+```jsx
+const input = "<script>alert('Hacked!')</script>";
+<p>{input}</p> // Renders as: &lt;script&gt;alert('Hacked!')&lt;/script&gt;
+```
+- Nothing dangerous will run — it's shown as plain text.
+
+---
+
+### 2. Prevents HTML or Script Injection
+
+- JSX does **not run** any HTML or JavaScript inserted via strings.
+- Protects your app from **Cross-Site Scripting (XSS)** attacks.
+
+---
+
+### 3. React Sanitizes All Interpolated Content
+
+- Values inside JSX `{}` are **sanitized**.
+- Dangerous user input will not affect the DOM.
+
+**Example:**
+```jsx
+<input value={userInput} /> // Safe
+```
+
+---
+
+### 4. Only `dangerouslySetInnerHTML` Can Inject Raw HTML
+
+- Use **only with trusted or sanitized data**.
+
+**Example:**
+```jsx
+<div dangerouslySetInnerHTML={{ __html: "<b>Bold</b>" }} />
+```
+⚠️ Unsafe if you use raw user input — can lead to XSS.
+
+---
+
+### 5. JSX Never Executes JavaScript Strings
+
+- Code like `alert("hi")` is treated as a **string**, not as code.
+
+**Example:**
+```jsx
+const input = "alert('hi')";
+<p>{input}</p> // Just prints alert('hi')
+```
+
+---
+
+### 6. Safe by Default — Unless You Bypass It
+
+- Without `dangerouslySetInnerHTML`, JSX is secure.
+- No need to sanitize most content manually.
+
+---
+## When do you need to use refs?
+- Managing focus, text selection, or media playback
+```js
+const inputRef = useRef();
+
+useEffect(() => {
+  inputRef.current.focus();
+}, []);
+```
+- Triggering animations or transitions manually
+```js
+const boxRef = useRef();
+
+useEffect(() => {
+  gsap.to(boxRef.current, { x: 100 });
+}, []);
+```
+- Measuring element dimensions/position (e.g., height, offset)
+```js
+const divRef = useRef();
+
+useEffect(() => {
+  console.log(divRef.current.offsetHeight);
+}, []);
+```
+- Accessing child component methods (only for class components or forwardRef components)
+```js
+// Child.jsx
+import React, { useImperativeHandle, forwardRef, useRef } from 'react';
+
+const Child = forwardRef((props, ref) => {
+  const inputRef = useRef();
+
+  // Expose methods to parent via the ref
+  useImperativeHandle(ref, () => ({
+    focusInput: () => {
+      inputRef.current.focus();
+    },
+    sayHi: () => alert('Hi from Child!')
+  }));
+
+  return <input ref={inputRef} placeholder="Type here" />;
+});
+
+export default Child;
+```
+```js
+// Parent.jsx
+import React, { useRef, useEffect } from 'react';
+import Child from './Child';
+
+function Parent() {
+  const childRef = useRef();
+
+  useEffect(() => {
+    childRef.current.focusInput();
+    childRef.current.sayHi();
+  }, []);
+
+  return <Child ref={childRef} />;
+}
+```
+- Preserving values across renders (without causing re-renders)
+```js
+const renderCount = useRef(0);
+renderCount.current += 1;
+```
+## What is windowing technique?
+- The windowing technique (also known as virtualization) is a performance optimization strategy in frontend development — especially useful when rendering large lists or tables in the UI.
+- The windowing technique renders only the items currently visible in the viewport (plus a few extra for smoother scrolling). As the user scrolls, items are recycled and updated to reflect new content.
+- Improves performance
+- Reduces memory usage
+- Speeds up rendering
+- When to use it?
+  - Large lists (e.g., 1000+ items)
+  - Tables with lots of rows
+  - Infinite scroll UIs
+- Libraries
+  - `react-window` (lightweight, by Brian Vaughn)
+  - `react-virtualized` (more powerful but heavier)
+  - `TanStack Virtual` (framework-agnostic, modern)
+- Real-World Use Cases
+  - Long dropdowns
+  - Chat apps
+  - Log viewers
+  - Search results
+  - Data-heavy dashboards
 
 ## Can you list down top websites or applications using react as front end framework?
 1. Tech Giants & Social Media
@@ -212,43 +360,6 @@ Tesla – Uses React for web and control panel interfaces.
 - Better State Management – useState, useEffect, useReducer simplify state handling.
 - Enhance Performance – Hooks optimize re-renders by managing dependencies effectively.
 
-## How do you access imperative API of web components?
-- Use `useRef` – To get a reference to the Web Component.
-- Use `useEffect` – To interact with the component after it mounts.
-- Directly call methods – Access Web Component methods via `ref.current`.
-
-```js
-<script>
-  class CustomButton extends HTMLElement {
-    connectedCallback() {
-      this.innerHTML = `<button>Click Me</button>`;
-    }
-
-    focusButton() {
-      this.querySelector("button").focus();
-    }
-  }
-  customElements.define("custom-button", CustomButton);
-</script>
-```
-```js
-import { useEffect, useRef } from "react";
-
-function App() {
-  const buttonRef = useRef(null);
-
-  useEffect(() => {
-    if (buttonRef.current) {
-      buttonRef.current.focusButton(); // Calling the Web Component's method
-    }
-  }, []);
-
-  return <custom-button ref={buttonRef}></custom-button>;
-}
-
-export default App;
-```
-
 ## What is an Imperative API?
 An Imperative API allows direct control over an object/component using methods. It tells how to do something.
 - Direct Commands – You explicitly call functions/methods.
@@ -295,6 +406,42 @@ function MyComponent() {
 - When using third-party libraries that rely on methods.
 - When performance optimization is needed (e.g., avoiding unnecessary re-renders).
 
+## How do you access imperative API of web components?
+- Use `useRef` – To get a reference to the Web Component.
+- Use `useEffect` – To interact with the component after it mounts.
+- Directly call methods – Access Web Component methods via `ref.current`.
+
+```js
+<script>
+  class CustomButton extends HTMLElement {
+    connectedCallback() {
+      this.innerHTML = `<button>Click Me</button>`;
+    }
+
+    focusButton() {
+      this.querySelector("button").focus();
+    }
+  }
+  customElements.define("custom-button", CustomButton);
+</script>
+```
+```js
+import { useEffect, useRef } from "react";
+
+function App() {
+  const buttonRef = useRef(null);
+
+  useEffect(() => {
+    if (buttonRef.current) {
+      buttonRef.current.focusButton(); // Calling the Web Component's method
+    }
+  }, []);
+
+  return <custom-button ref={buttonRef}></custom-button>;
+}
+
+export default App;
+```
 ## Do browsers understand JSX code?
 Browsers do not natively understand JSX, but tools like Babel convert it into JavaScript that browsers can execute.
 
@@ -319,3 +466,57 @@ Browsers do not natively understand JSX, but tools like Babel convert it into Ja
 ### With Concurrent Rendering (Non-Blocking UI):
 - React splits rendering into smaller chunks and prioritizes urgent updates.
 - Introduced via React 18’s `createRoot()` API.
+
+## How do you implement Server Side Rendering or SSR?
+1. Create an Express Server (`server.js`)
+```js
+import express from "express";
+import React from "react";
+import ReactDOMServer from "react-dom/server";
+import App from "./src/App"; // Import your React App component
+
+const app = express();
+
+app.use(express.static("build")); // Serve static files
+
+app.get("*", (req, res) => {
+  const appHTML = ReactDOMServer.renderToString(<App />);
+
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>React SSR</title>
+    </head>
+    <body>
+      <div id="root">${appHTML}</div>
+      <script src="/static/js/main.js"></script>
+    </body>
+    </html>
+  `);
+});
+
+app.listen(3000, () => console.log("Server running on http://localhost:3000"));
+```
+2. Modify `index.js` (Hydrate on Client)
+```js
+import React from "react";
+import { hydrateRoot } from "react-dom/client";
+import App from "./App";
+
+hydrateRoot(document.getElementById("root"), <App />);
+```
+- Now, React renders on the server first, then hydrates on the client! 
+- `hydrateRoot` is used for hydrating a server-rendered React app on the client.
+- It attaches event listeners to existing server-rendered HTML instead of re-rendering it.
+- Faster than `createRoot` because it doesn't replace the existing DOM.
+
+## How to enable production mode in React?
+- For Vite:
+  - Run: `npm run build`
+  - Preview: `npm run preview`
+- For Webpack:
+  - Set mode: "production" in `webpack.config.js`
+  - Run: `npm run build`

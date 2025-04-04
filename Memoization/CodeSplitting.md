@@ -70,3 +70,35 @@ module.exports = {
 };
 ```
 - This automatically splits vendor libraries (`react`, `lodash`, etc.) into separate bundles.
+
+## What are loadable components?
+- React has built-in lazy loading via `React.lazy` and `Suspense`, but it doesn't support:
+  - Server-side rendering (SSR)
+  - Named exports
+  - Better control over loading and fallback
+  - Prefetching available
+  - More suited for production and larger apps
+
+```js
+npm install @loadable/component
+```
+```js
+import loadable from '@loadable/component';
+
+// Dynamically import a component
+const About = loadable(() => import('./About'));
+
+function App() {
+  return (
+    <div>
+      <h1>Welcome</h1>
+      <About />
+    </div>
+  );
+}
+```
+```js
+const About = loadable(() => import('./About'), {
+  fallback: <div>Loading...</div>,
+});
+```
