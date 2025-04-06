@@ -520,3 +520,63 @@ hydrateRoot(document.getElementById("root"), <App />);
 - For Webpack:
   - Set mode: "production" in `webpack.config.js`
   - Run: `npm run build`
+
+## How does React batch multiple state updates?
+- Batching means grouping multiple state updates into a single re-render to optimize performance.
+```js
+const [count1, setCount1] = useState(0);
+const [count2, setCount2] = useState(0);
+
+const handleClick = () => {
+  setCount1(prev => prev + 1);
+  setCount2(prev => prev + 1);
+};
+```
+- When `handleClick` is called:
+  - React batches `setCount1` and `setCount2`
+  - Triggers only one re-render, not two
+- Before React 18, batching did not happen in:
+  - `setTimeout`, `Promise.then`, `fetch`, etc.
+- In React 18+, batching works everywhere!
+---
+## How do you update nested objects inside state?
+```js
+const [user, setUser] = useState({
+  name: "Ruchitha",
+  address: {
+    city: "Nanded",
+    pincode: 421503
+  }
+});
+```
+```js
+//To update city inside address:
+setUser(prevUser => ({
+  ...prevUser,
+  address: {
+    ...prevUser.address,
+    city: "Mumbai"
+  }
+}));
+```
+- React state should be immutable, we use the spread operator to create a new copy of the object or array at each level, avoiding direct mutation.
+---
+## How do you update arrays inside state?
+
+```js
+const [fruits, setFruits] = useState(["apple", "banana", "orange"]);
+```
+```js
+//Add an Item
+setFruits(prevFruits => [...prevFruits, "mango"]);
+```
+```js
+//Remove an Item
+setFruits(prevFruits => prevFruits.filter(fruit => fruit !== "banana"));
+```
+```js
+//Update an Item
+setFruits(prevFruits =>
+  prevFruits.map(fruit => fruit === "orange" ? "grape" : fruit)
+);
+```

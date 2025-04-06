@@ -2,7 +2,7 @@
 
 ## Definition:
 - Hook are functions in React that allows to use state and lifecycle methods in functional components.
-
+---
 ## List of Hooks:
 - ```useState```
   - Manages state in a component
@@ -20,15 +20,15 @@
   - Memoizes a function.
 - ```useLayoutEffect``` 
   - Runs synchronously after DOM updates.
-
+---
 ## Rules of Hooks:
 - Call hooks only at the top level (not inside loops, conditions, or nested functions).
 - Call hooks only in React function components or custom hooks.
-
+---
 ## How to ensure hooks followed the rules in your project?
 - Install the ESLint plugin for React hooks.
 ```npm install eslint-plugin-react-hooks --save-dev```
-
+---
 ## Difference Between ```useEffect``` and ```useLayoutEffect```
 
 ### Timing:
@@ -50,8 +50,8 @@
 
 - useEffect: More efficient; recommended for most cases.
 - useLayoutEffect: Can impact performance if overused.
-
-### Custom Hooks
+---
+## Custom Hooks
 
 #### Steps to Create a Custom Hook
 1. Start with a Function:
@@ -170,6 +170,45 @@ function App() {
 
 export default App;
 ```
+---
+## `useReducer` Hook
+- It is a hook for managing more complex logic in components
+```js
+const [state, dispatch] = useReducer(reducer, initialState);
+```
+- `reducer`: A function that takes the current state and an action, then returns a new state.
+- `initialState`: The initial state value.
+- `dispatch`: A function to send actions to the reducer.
+
+```js
+import React, { useReducer } from 'react';
+
+const initialState = { count: 0 };
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'increment':
+      return { count: state.count + 1 };
+    case 'decrement':
+      return { count: state.count - 1 };
+    default:
+      return state;
+  }
+}
+
+function Counter() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  return (
+    <>
+      <h1>Count: {state.count}</h1>
+      <button onClick={() => dispatch({ type: 'decrement' })}>-</button>
+      <button onClick={() => dispatch({ type: 'increment' })}>+</button>
+    </>
+  );
+}
+```
+---
 
 
 
