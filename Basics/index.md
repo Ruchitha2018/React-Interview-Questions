@@ -1,12 +1,12 @@
 # Basics
 
-## What is React?
+## 1. What is React?
 
 - Open-Source
 - JS Frontend Library
-- used for building composable UIs particularly for SPAs.
+- Used for building composable UIs particularly for SPAs.
   
-## What are the features of React?
+## 2. What are the features of React?
 - Uses JSX Syntax: A syntax extension that allows you to write HTML-like code within JavaScript.
 - Uses Virtual DOM
 - Component Based Architecture
@@ -14,79 +14,80 @@
 - Unidirectional/one-way data flow
 
 
-## What is JSX?
+## 3. What is JSX?
 
 - A syntax extension that allows you to write HTML-like code within JavaScript.
 - Syntactic Sugar for the `React.createElement(type, props, ...children)`
 
-## What are the ways of creating components
+## 4. What are the ways of creating components
 
 - Functional Components
 - Class Components
 
-## What are States?
+## 5. What are States?
 
 - It is an object that is used to store information and holds dynamic data while the app is running, like user input, button clicks, or data fetched from a server.
 - Mutuable and Dynamic Data
 - When a components state changes, React automatically re-renders
 - Managed with `useState` hook.
 
-## What are Props?
+## 6. What are Props?
 
 - Way to pass static/dynamic data from parent to child components.
 - Immutable
 - Passed as Attributes
 
-## What is Key Prop?
+## 7. What is Key Prop?
 
 - Special attribute should include when mapping arrays/objects.
 - Helps which items have changed, added or removed.
 - Used for performance optimization.
 - Should be unique value
 
-## What is Virtual DOM?
+## 8. What is Virtual DOM?
 
 - It is the lightweight copy of the real DOM.
 - Steps:
   - When component re-renders, React creates a virtual copy of the Real DOM i.e., virtual DOM.
   - When app data changes, React first updates the Virtual DOM, not the Real DOM.
-  - React compares the updated virtual DOM with the previous version of the virtual DOM called Diffing.
+  - React compares the updated virtual DOM with the previous version of the virtual DOM called **Diffing**.
   - React identifies which parts of the virtual DOM have changed (e.g., new elements, deleted elements, updated content) and needs to be reflected in the real DOM.
-  - It updates only the changed parts of the real DOM, making the app fast and efficient called Reconciliation.
+  - It updates only the changed parts of the real DOM, making the app fast and efficient called **Reconciliation**.
   - Reconciliation helps React figure out the smallest number of changes to make, improving performance and speed.
-## What are Controlled Components?
+  - 
+## 9. What are Controlled Components?
 
 - Forms element state is managed by React.
 - Value of the input is controlled by the components state.
 - Uses `useState()`
 
-## What are Uncontrolled Components?
+## 10. What are Uncontrolled Components?
 
 - Forms element state is managed by DOM.
 - Input value is accessed using a ```ref```.
 
-## What is React Fiber
+## 11. What is React Fiber
 - React Fiber is the new reconciliation engine in React (introduced in React 16) that improves rendering performance.
   - Incremental rendering – Splits work into chunks for smooth updates
   - Concurrency – Prioritizes updates for a better user experience
   - Pausing & resuming rendering – Avoids UI blocking
   - Better animations & transitions – More fluid interactions
 
-## What are Synthetic Events?
+## 12. What are Synthetic Events?
 - Are wrapper elements around the browser's native element.
 - Provide consistent behaviour across different browsers and optimize event handling.
 
-## What is Children Prop?
+## 13. What is Children Prop?
 - It is a special prop that allows to pass content(text, element or component) to a component from its parent.
 - commonly used in layout components like wrappers, containers or modal dialogs.
 
-## What are Fragments?
+## 14. What are Fragments?
 
 - It is the way to group multiple elements together without adding extra `div` or nodes.
 - `<></>`
 - `<React.Fragment></React.Fragment>`
 
-## What are Portals?
+## 15. What are Portals?
 
 - It allows us to render components outside the parent component DOM hierarchy.
 - Examples are Modals, Tooltips, Notifications
@@ -117,7 +118,7 @@ function App() {
 
 export default App;
 ```
-## How to apply validation on props in React?
+## 16. How to apply validation on props in React?
 1. Using PropTypes (for JavaScript)
 ```js
 npm install prop-types
@@ -178,29 +179,20 @@ export default MyComponent;
 | **Performance**  | Slightly slower | Faster        |
 | **Additional Setup** | Install `prop-types` | Use `.tsx` file |
 
-## What are the limitations of React?
+## 17. What are the limitations of React?
 - Frequent Updates – Fast-changing versions can cause breaking changes.
-
 - Steep Learning Curve – Concepts like JSX, hooks, and state management take time to learn.
-
 - SEO Issues – Single-page applications (SPA) may not be SEO-friendly without extra setup.
-
 - JSX Complexity – Mixing JavaScript with HTML can make code harder to read.
-
 - Large Bundle Size – Apps can become heavy due to dependencies.
-
 - Boilerplate Code – State management with Redux or Context requires extra code.
-
 - No Built-in State Management – External libraries like Redux or Recoil are needed for complex apps.
-
 - Third-Party Dependencies – React lacks built-in features like routing and form handling.
-
 - Performance Issues – Frequent re-renders and large component trees can slow down apps.
-
 - Debugging Difficulty – Managing state and hooks can be tricky.
 
 
-## Difference between React and React DOM:
+## 18. Difference between React and React DOM:
 - React:
   - Used to build UI components and manage their logic and state
   - Do not directly interact with the DOM.
