@@ -180,16 +180,17 @@ export default MyComponent;
 | **Additional Setup** | Install `prop-types` | Use `.tsx` file |
 
 ## 17. What are the limitations of React?
-- Frequent Updates – Fast-changing versions can cause breaking changes.
-- Steep Learning Curve – Concepts like JSX, hooks, and state management take time to learn.
-- SEO Issues – Single-page applications (SPA) may not be SEO-friendly without extra setup.
-- JSX Complexity – Mixing JavaScript with HTML can make code harder to read.
-- Large Bundle Size – Apps can become heavy due to dependencies.
-- Boilerplate Code – State management with Redux or Context requires extra code.
-- No Built-in State Management – External libraries like Redux or Recoil are needed for complex apps.
-- Third-Party Dependencies – React lacks built-in features like routing and form handling.
-- Performance Issues – Frequent re-renders and large component trees can slow down apps.
-- Debugging Difficulty – Managing state and hooks can be tricky.
+
+|  **Limitation**                            | **Solution**                                                                 |
+|---------------------------------------------|----------------------------------------------------------------------------------|
+| **1. SEO Limitations**                      | Use **Next.js** or **Remix** for SSR/SSG; use `react-helmet` for meta tags      |
+| **2. High Initial Load Time**               | Use **Code Splitting** (`React.lazy`, `Suspense`); optimize bundle size         |
+| **3. Boilerplate Code & Verbosity**         | Use frameworks like **Next.js**; use **Redux Toolkit** or **Context API**       |
+| **4. State Management for Large Apps**      | Use **Redux**, **Recoil**, or **Zustand**; use **Formik** or **React Hook Form**|
+| **5. Performance Issues (Re-rendering)**    | Use `React.memo`, `useMemo`, `useCallback`; use **React Profiler**              |
+| **6. Steep Learning Curve**                 | Follow a structured learning path; use **React Dev Tools** for easier debugging |
+| **7. No Built-in Routing or Forms**         | Use **React Router**, **React Hook Form**, **React Query / SWR**                |
+
 
 
 ## 18. Difference between React and React DOM:
@@ -209,7 +210,7 @@ export default MyComponent;
 - Separation allows React to work on different platforms (e.g., React Native).
 - Keeps React lightweight and modular for easier maintenance.
 
-## Why we need to be careful when spreading props on DOM elements?
+## 19. Why we need to be careful when spreading props on DOM elements?
 1. Unintended Props – Extra or invalid props may get added, causing React warnings.
 ```js
 const Button = (props) => <button {...props}>Click</button>;
@@ -225,7 +226,7 @@ const userProps = { onClick: () => alert("Clicked!"), dangerous: "<script>alert(
 5. Invalid HTML Attributes – Non-standard attributes may end up in the DOM, affecting behavior.
 6. **Best Practice:** Filter and pass only required props instead of using `{...props}` blindly. 
 
-## What is Switching Component?
+## 20. What is Switching Component?
 A switching component in React is a component that conditionally renders different components based on a specific condition (like state, props, or routes).
  #### Example 1: Conditional Rendering (Manual Switching)
  ```js
@@ -262,8 +263,8 @@ const App = () => {
 };
 ```
 
-## What are React Mixins?
-- Mixins were a feature in React class components (before ES6 classes) that allowed sharing reusable logic across multiple components. 
+## 21. What are React Mixins?
+- Mixins were a feature in React class components (before ES6 classes) that allowed **sharing reusable logic** across multiple components. 
 - Removed in React 16 due to:
   - Name Collisions – Multiple mixins could have the same method names, causing conflicts.
   - Implicit Dependencies – Hard to track where a method came from.
@@ -275,7 +276,7 @@ const App = () => {
 - Modern React (with Hooks) does not support Mixins.
 
 
-## What are React Components Naming?
+## 22. What are React Components Naming?
 
 1. **Start with a Capital Letter:** Components must use PascalCase (e.g., MyComponent). Lowercase names are treated as HTML tags.
 2. **Avoid Reserved Keywords:** Don't use JavaScript or HTML reserved words like return or default.
@@ -297,7 +298,7 @@ const DynamicComponent = MyComponent;
 <DynamicComponent />;
 ```
 
-## Are custom DOM attributes supported in React v16?
+## 23. Are custom DOM attributes supported in React v16?
 - React 16+ supports custom DOM attributes without needing `data-` or `aria-` prefixes. and passes them to the rendered HTML.
 ```js
 //Example
@@ -309,22 +310,22 @@ const DynamicComponent = MyComponent;
 ```
 - Best practice: Use `data-*` attributes for consistency
 
-## Why we cant use for loop inside jsx?
+## 24. Why we cant use for loop inside jsx?
 - You can't use a for loop directly inside JSX because JSX expects expressions, and for is a statement, not an expression.
 - Expressions return values, statements perform actions!
 
-## Why you can't update props in React?
+## 25. Why you can't update props in React?
 - Props are immutable: They cannot be changed by the child component.
 - Unidirectional data flow: Props flow from parent to child, ensuring predictable updates.
 - Controlled by parent: Props reflect parent state; only the parent can update them.
 - Solution: Manage the value in the parent’s state and pass it via props.
-## What are the React Animation Packages?
+## 26. What are the React Animation Packages?
 - Framer Motion
 - React Spring
 - React Transition Group
 - React Motion
 
-## What are React Specific Linters?
+## 27. What are React Specific Linters?
 - Help maintain clean, consistent and error-free code in React Projects.
 - Plugins:
  - ```eslint-plugin-react```: Provides linting rules for React.
@@ -332,7 +333,7 @@ const DynamicComponent = MyComponent;
  - ```eslint-plugin-jsx-a11y```: Enforces accessibility best practices in JSX code.
  - Code formatter, integrates with ESLint using ```eslint-plugin-prettier```.
 
-## How events are different in React?
+## 28. How events are different in React?
 - React wraps native events in a SyntheticEvent wrapper for cross-browser consistency.
 ```js
 function handleClick(event) {
@@ -347,7 +348,7 @@ function handleClick(event) {
   - Use `event.preventDefault()` instead.
 - Works the same across all browsers due to the SyntheticEvent wrapper.
 
-## What is the impact of indexes as keys?
+## 29. What is the impact of indexes as keys?
 - Re-renders Unnecessary Components – If the list order changes, React mistakenly reuses incorrect components.
 - Loss of State – Input fields, animations, or user interactions reset unexpectedly.
 - Performance Issues – React does extra work re-rendering items when not needed.
